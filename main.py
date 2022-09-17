@@ -11,6 +11,7 @@ pygame.init()
 c = 1
 
 class SudokuBoard(object):
+    """ Class to handle the graphics of the sudoku board and to interact with the sudokuSolver class """
     def __init__(self, screen):
         self.sudoku = Sudoku()
         self.cells = []
@@ -24,6 +25,9 @@ class SudokuBoard(object):
                 self.cells[i].append(Cell(screen, self.sudoku.grid[i, j], (i * 60 + (i // 3) * 4 + 1), (j * 60 + (j // 3) * 4 + 1), i, j))
     
     def state(self):
+        """
+        Checks wether the game is finished
+        """
         if self.won:
             return 1
         elif self.lost:
@@ -47,6 +51,9 @@ class SudokuBoard(object):
                 self.wrong += self.cells[i][j].manage(self.sudoku)
     
     def hint(self):
+        """
+        Uses the sudokuSolver object to get a hint for the user
+        """
         (i, j, number) = self.sudoku.hint()
         self.cells[i][j].value = number
         self.cells[i][j].incorrect = False
@@ -55,6 +62,9 @@ class SudokuBoard(object):
         self.cells[i][j].draw()
 
 class Cell(object):
+    """
+    Manages the graphics of and individual cell
+    """
     def __init__(self, screen, value, x, y, i, j):
         self.value = value
         self.rect = pygame.Rect((x + 1) * c, (y + 1) * c, 58 * c, 58 * c) #dimensions for the rectangle
@@ -136,7 +146,7 @@ class Cell(object):
     def draw(self):
         """
         Input: None
-        Returns: Updates the tile
+        Function: Updates the tile if there has been any changes made by the player
         """
         rect = pygame.Surface((60 * c, 60 * c))
         if self.correct or not self.incorrect:
